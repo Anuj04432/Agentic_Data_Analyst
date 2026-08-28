@@ -1,20 +1,52 @@
 from data.open_dataset import dataset_format
 import pandas as pd
 
-def data_info(df):
+def data_info(df,column=None):
     data_shape = df.shape
 
 
     info = {
-        "describe":df.describe(),
-        "columns":df.columns,
-        "no_rows":data_shape[0],
-        "no_colums":data_shape[1],
-        "nullvalues":df.isnull().sum(),
-        "dtypes": df.dtypes,
-        # "sum":{i: round(df[i].sum().item(),2)
-        #        for i in df.columns
-        #        if pd.api.types.is_numeric_dtype(df[i])},
-        "sum1": df.select_dtypes(include="number").sum()
+        # Dataset
+        "shape": df.shape,
+        "memory_usage": df.memory_usage(deep=True).sum(),
+        
+        # Missing data
+        "total_missing": df.isnull().sum(),
+        "missing_percentage": (
+            df.isnull().sum() / len(df) * 100
+        ).round(2),
+
+        # Duplicates
+        "duplicate_rows": df.duplicated().sum(),
+
+        # Columns
+        "numeric_columns": df.select_dtypes(include="number").columns.tolist(),
+        "categorical_columns": df.select_dtypes(include="object").columns.tolist(),
+        "datetime_columns": df.select_dtypes(include="datetime").columns.tolist(),
+
+        # Cardinality
+        "unique_values": df.nunique(),
+        
+        # Numeric
+        "sum": df.select_dtypes(include="number").sum(),
+        "mean": df.select_dtypes(include="number").mean(),
+        "median": df.select_dtypes(include="number").median(),
+        "min": df.select_dtypes(include="number").min(),
+        "max": df.select_dtypes(include="number").max(),
+        "std": df.select_dtypes(include="number").std(),
+        "variance": df.select_dtypes(include="number").var(),
+
+        # Relationships
+        "correlation": df.select_dtypes(include="number").corr(),
+
+        # Statistical distribution
+        "skewness": df.select_dtypes(include="number").skew(),
+        "kurtosis": df.select_dtypes(include="number").kurt(),
+
+        # Categorical
+        "categorical_summary": {
+            col: df[col].value_counts().head(10)
+            for col in df.select_dtypes(include="object").columns
+        }
     }
     return info
