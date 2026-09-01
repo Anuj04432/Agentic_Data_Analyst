@@ -43,7 +43,7 @@ if file is not None:
             st.metric(label="No.of Columns",value=df.shape[1])
 
 
-    col_select = st.selectbox(label="which column",options=columns)
+    col_select = st.selectbox(label="which column want to select",options=columns)
 
     if col_select in columns:
         if pd.api.types.is_numeric_dtype(df[col_select]):
