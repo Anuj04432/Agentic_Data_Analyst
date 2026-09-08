@@ -11,7 +11,7 @@ def data_info(df,column=None):
         "memory_usage": df.memory_usage(deep=True).sum(),
         
         # Missing data
-        "total_missing": df.isnull().sum(),
+        "total_missing": df.isnull().sum().sum(),
         "missing_percentage": (
             df.isnull().sum() / len(df) * 100
         ).round(2),
