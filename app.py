@@ -6,6 +6,7 @@ from data.data_extract import data_info
 from utils.history import save_history,get_history
 
 st.title("Agentic Data Analysis",text_alignment="center")
+st.divider()
 df = None
 with st.sidebar:
     file = st.file_uploader(label="Upload your businees dataset",type=["csv","excel","sql"],max_upload_size=500,help="Upload the files that are mentioned",label_visibility="visible",)
@@ -29,7 +30,17 @@ with st.sidebar:
      radio_select = st.radio(label="Select the option",options=("Data Analysis","Data Visualization","Ask your data"),horizontal=True)
 if df is not None:
     if radio_select == "Data Analysis":
-        st.write(df.columns)
+        col1,col2,col3,col4 = st.columns(4)
+        with col1:
+            st.metric("rows",info["shape"][0])
+            st.metric("Total nulls",info["total_missing"])
+        with col2:
+            st.metric("columns",info["shape"][1])
+            st.metric("Duplicates",info["duplicate_rows"])
+            st.write(info["sum"])
+    
+    st.table(data=df.head(),height="content",width="stretch",border=True,hide_index=None)
+
     if radio_select == "Data Visualization":
         st.success(f"Datavisualization on  {filename}")
          
