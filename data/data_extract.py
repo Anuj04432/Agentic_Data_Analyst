@@ -1,10 +1,8 @@
 from data.Data_ingestion import dataset_format
 import pandas as pd
 
-def data_info(df,column=None):
-    data_shape = df.shape
-
-
+def data_info(df):
+    
     info = {
         # Dataset
         "shape": df.shape,
