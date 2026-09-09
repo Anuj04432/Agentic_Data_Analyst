@@ -18,7 +18,7 @@ def data_info(df):
         "duplicate_rows": df.duplicated().sum(),
 
         # Columns
-        "numeric_columns": df.select_dtypes(include="number").columns,
+        "numeric_columns": df.select_dtypes(include="number"),
         "categorical_columns": df.select_dtypes(include="object").columns,
         "datetime_columns": df.select_dtypes(include="datetime").columns,
 
