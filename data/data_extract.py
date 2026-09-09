@@ -10,6 +10,7 @@ def data_info(df):
         
         # Missing data
         "total_missing": df.isnull().sum().sum(),
+        "null_values": df.isnull().sum(),
         "missing_percentage": (
             df.isnull().sum() / len(df) * 100
         ).round(2),
