@@ -39,18 +39,23 @@ if df is not None:
             st.metric("memory",info["memory_usage"])
     
         num_cols = info["numeric_columns"]
-        data = data_info(num_cols)
-        values = {}
-        for i in num_cols:
-            values["mean"] = data["mean"]
-            values["null_values"] = data["total_missing"]
-            values["sum"] = data["sum"]
-            values["min"] = data["min"]
-            values["max"] = data["max"]
-            values["std"] = data["std"]
-            values["variance"] = data["variance"]
+        
+        values = {
+            "mean": info["mean"],
+            "null_values": num_cols.isnull().sum(),
+            "sum": info["sum"],
+            "min": info["min"],
+            "max": info["max"],
+            "median": info["median"],
+            "std": info["std"]
+        }
+        
         df_values = pd.DataFrame(values)
         st.table(df_values.style.format("{:.2f}"))
+
+
+        st.table(data=info["categorical_summary"])
+
 
             
         
