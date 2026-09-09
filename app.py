@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 
+
 from data.Data_ingestion import dataset_format
 from data.data_extract import data_info
 from utils.history import save_history,get_history
@@ -19,9 +20,7 @@ with st.sidebar:
         else:
              with open(f"data/history/{recent_datasets}", "rb") as f:
                   df = dataset_format(f,recent_datasets)
-                  
-        columns = df.columns
-        info = data_info(df,columns)
+        info = data_info(df)
 
     else:
         st.warning("**Please upload a dataset or select a recent dataset to proceed.**")
@@ -37,9 +36,24 @@ if df is not None:
         with col2:
             st.metric("columns",info["shape"][1])
             st.metric("Duplicates",info["duplicate_rows"])
-            st.write(info["sum"])
+            st.metric("memory",info["memory_usage"])
     
-    st.table(data=df.head(),height="content",width="stretch",border=True,hide_index=None)
+        num_cols = info["numeric_columns"]
+        data = data_info(num_cols)
+        values = {}
+        for i in num_cols:
+            values["mean"] = data["mean"]
+            values["null_values"] = data["total_missing"]
+            values["sum"] = data["sum"]
+            values["min"] = data["min"]
+            values["max"] = data["max"]
+            values["std"] = data["std"]
+            values["variance"] = data["variance"]
+        df_values = pd.DataFrame(values)
+        st.table(df_values.style.format("{:.2f}"))
+
+            
+        
 
     if radio_select == "Data Visualization":
         st.success(f"Datavisualization on  {filename}")
