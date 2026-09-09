@@ -20,9 +20,9 @@ def data_info(df,column=None):
         "duplicate_rows": df.duplicated().sum(),
 
         # Columns
-        "numeric_columns": df.select_dtypes(include="number").columns.tolist(),
-        "categorical_columns": df.select_dtypes(include="object").columns.tolist(),
-        "datetime_columns": df.select_dtypes(include="datetime").columns.tolist(),
+        "numeric_columns": df.select_dtypes(include="number").columns,
+        "categorical_columns": df.select_dtypes(include="object").columns,
+        "datetime_columns": df.select_dtypes(include="datetime").columns,
 
         # Cardinality
         "unique_values": df.nunique(),
