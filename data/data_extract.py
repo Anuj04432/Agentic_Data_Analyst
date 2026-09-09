@@ -26,13 +26,13 @@ def data_info(df):
         "unique_values": df.nunique(),
         
         # Numeric
-        "sum": df.select_dtypes(include="number").sum(),
-        "mean": df.select_dtypes(include="number").mean(),
-        "median": df.select_dtypes(include="number").median(),
-        "min": df.select_dtypes(include="number").min(),
-        "max": df.select_dtypes(include="number").max(),
-        "std": df.select_dtypes(include="number").std(),
-        "variance": df.select_dtypes(include="number").var(),
+        "sum": df.select_dtypes(include="number").sum().round(2),
+        "mean": df.select_dtypes(include="number").mean().round(2),
+        "median": df.select_dtypes(include="number").median().round(2),
+        "min": df.select_dtypes(include="number").min().round(2),
+        "max": df.select_dtypes(include="number").max().round(2),
+        "std": df.select_dtypes(include="number").std().round(2),
+        "variance": df.select_dtypes(include="number").var().round(2),
 
         # Relationships
         "correlation": df.select_dtypes(include="number").corr(),
