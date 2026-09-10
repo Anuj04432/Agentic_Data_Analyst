@@ -22,11 +22,17 @@ with st.sidebar:
                   df = dataset_format(f,recent_datasets)
         info = data_info(df)
 
+        radio_select = st.radio(label="Select the option",options=("Data Analysis","Data Visualization","Ask your data"),horizontal=True)
+        select = st.selectbox("Select the columns",df.columns)
+        st.write(df[select].dtype)
+        
+
     else:
         st.warning("**Please upload a dataset or select a recent dataset to proceed.**")
 
-with st.sidebar:
-     radio_select = st.radio(label="Select the option",options=("Data Analysis","Data Visualization","Ask your data"),horizontal=True)
+
+# -------------- Tabs -------------------
+
 if df is not None:
     if radio_select == "Data Analysis":
         col1,col2,col3,col4 = st.columns(4)
@@ -47,21 +53,18 @@ if df is not None:
             "min": info["min"],
             "max": info["max"],
             "median": info["median"],
-            "std": info["std"]
+            "std": info["std"],
+            "dtype": num_cols.dtypes.astype(str)
         }
         
         df_values = pd.DataFrame(values)
-        st.table(df_values.style.format("{:.2f}"))
-
-
+        format_subset = [col for col in df_values.columns if col != "dtype"]
+        st.table(df_values.style.format(formatter="{:.2f}", subset=format_subset))
         st.table(data=info["categorical_summary"])
-
-
-            
-        
 
     if radio_select == "Data Visualization":
         st.success(f"Datavisualization on  {filename}")
-         
+
+
 
     
