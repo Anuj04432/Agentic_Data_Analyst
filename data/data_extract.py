@@ -7,6 +7,7 @@ def data_info(df):
         # Dataset
         "shape": df.shape,
         "memory_usage": df.memory_usage(deep=True).sum(),
+        "dtypes": df.dtypes,
         
         # Missing data
         "total_missing": df.isnull().sum().sum(),
