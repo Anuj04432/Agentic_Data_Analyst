@@ -23,8 +23,8 @@ with st.sidebar:
         info = data_info(df)
 
         radio_select = st.radio(label="Select the option",options=("Data Analysis","Data Visualization","Ask your data"),horizontal=True)
-        select = st.selectbox("Select the columns",df.columns)
-        st.write(df[select].dtype)
+        # select = st.selectbox("Select the columns",options=[None] + list(df.columns))
+        # st.write(df[select].dtype)
         
 
     else:
@@ -59,11 +59,21 @@ if df is not None:
         
         df_values = pd.DataFrame(values)
         format_subset = [col for col in df_values.columns if col != "dtype"]
-        st.table(df_values.style.format(formatter="{:.2f}", subset=format_subset))
+        st.table(df_values.style.format(formatter="{:.2f}", subset=format_subset),height="stretch",width="stretch",border=True)
         st.table(data=info["categorical_summary"])
 
-    if radio_select == "Data Visualization":
+        
+
+
+    
+
+if radio_select == "Data Visualization":
         st.success(f"Datavisualization on  {filename}")
+        with st.sidebar:
+             x = st.selectbox(label="Select the column for x-axis",options=[None]+list(df.columns))
+             y = st.selectbox(label="Select the column for x-axis",options=[None]+list(df.columns),key="name")
+        st.line_chart(data=df,x=x,y=y)
+            
 
 
 
