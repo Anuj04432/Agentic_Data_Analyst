@@ -190,36 +190,7 @@ tab_overview, tab_viz, tab_agent, tab_ml = st.tabs([
 
 ## 4. Recommended Folder Structure
 
-Organize the repository for maintainability and modularity:
 
-```text
-Agentic_Data_Analyst/
-├── data/
-│   ├── __init__.py
-│   ├── data_extract.py       # Statistical extraction & profiling
-│   └── open_dataset.py       # Ingestion for CSV, Excel, SQLite, etc.
-├── src/
-│   ├── __init__.py
-│   ├── agent/
-│   │   ├── __init__.py
-│   │   ├── code_runner.py    # Sandboxed execution of generated Python code
-│   │   ├── llm_client.py     # Gemini / OpenAI API client setup
-│   │   └── prompts.py        # System prompts & dataset context builder
-│   ├── ml/
-│   │   ├── __init__.py
-│   │   └── auto_trainer.py   # Automated scikit-learn baseline trainer
-│   └── ui/
-│       ├── __init__.py
-│       ├── tab_overview.py   # Overview & schema views
-│       ├── tab_viz.py        # Charting & correlation heatmap
-│       ├── tab_chat.py       # Agentic chat interface
-│       └── tab_ml.py         # Model training & metrics
-├── .env                      # API keys (GIT IGNORED)
-├── .gitignore
-├── app.py                    # Main Streamlit entry point
-├── pyproject.toml
-└── README.md
-```
 
 ---
 
