@@ -67,7 +67,7 @@ if df is not None:
 
     
 
-if radio_select == "Data Visualization":
+    if radio_select == "Data Visualization":
         st.success(f"Datavisualization on  {filename}")
         with st.sidebar:
              x = st.selectbox(label="Select the column for x-axis",options=[None]+list(df.columns))
