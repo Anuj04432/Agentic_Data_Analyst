@@ -2,4 +2,4 @@ import streamlit as st
 import pandas as pd
 
 
-st.title("This is Data Analysis Tab")
+st.caption("This is Data Analysis Tab",text_alignment="center")
