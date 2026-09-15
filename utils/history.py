@@ -2,7 +2,7 @@ from pathlib import Path
 
 
 def save_history(file):
-    UPLOAD_DIR =  Path("data/history/")
+    UPLOAD_DIR =  Path("utils/saved_history/")
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
     if file:
@@ -11,7 +11,7 @@ def save_history(file):
             f.write(file.getbuffer())
 
 def get_history():
-    UPLOAD_DIR = Path("data/history/")
+    UPLOAD_DIR = Path("utils/saved_history/")
     if not UPLOAD_DIR.exists():
         return []
     return [f.name for f in UPLOAD_DIR.iterdir() if f.is_file()]
