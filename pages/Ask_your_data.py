@@ -2,4 +2,6 @@ import streamlit as st
 import pandas as pd
 
 
-st.caption("This is Data Analysis Tab",text_alignment="center")
+st.subheader("Ask any thing about youur data")
+
+text = st.text_input("What you want to ask.......")
