@@ -3,7 +3,7 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 UPLOAD_DIR = PROJECT_ROOT / "data" / "uploaded"
 SAMPLE_DIR = PROJECT_ROOT / "data" / "sample"
-HISTORY_DIR = PROJECT_ROOT / "data" / "saved_history"
+HISTORY_DIR = PROJECT_ROOT / "utils" / "saved_history"
 
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
