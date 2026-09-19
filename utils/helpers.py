@@ -39,4 +39,37 @@ def get_column_types(df: pd.DataFrame) -> dict[str, list[str]]:
         "all":df.columns.tolist(),
     }
 
+
+def get_column_summary(df: pd.DataFrame) -> pd.DataFrame:
+    if df is None or df.empty:
+        return "Dataset is empty so use a valid dataset"
+
+    summary = []
+    total_rows = len(df)
+
+    for col in df.columns:
+        series = df[col]
+        no_null = int(series.notna().sum())
+        missing_values =int(series.isnull().sum())
+        missing_percent = round((missing_values/ total_rows *100),2) if total_rows > 0 else 0.0
+        unique_count = int(series.nunique(dropna=True))
+
+        sample_vals = series.dropna().unique()[:3]
+        sample_str = ", ".join(str(val) for val in sample_vals)
+        if len(sample_str) > 50 :
+            sample_str = sample_str[:47] + "..."
+
+        summary.append({
+            "columns": col,
+            "Data Type": str(series.dtype),
+            "Non-Null values": no_null,
+            "Null values": missing_values,
+            "Missing percent": missing_percent,
+            "Unique values": unique_count,
+            "Sample values":sample_str if sample_str else "N/A"
+        })
+
+    return pd.DataFrame(summary)
+
+
     
