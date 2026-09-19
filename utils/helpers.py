@@ -1,4 +1,5 @@
 import pandas as pd
+import re
 
 
 def format_bytes(size_bytes: int | float) -> str:
@@ -70,6 +71,30 @@ def get_column_summary(df: pd.DataFrame) -> pd.DataFrame:
         })
 
     return pd.DataFrame(summary)
+
+
+def clean_column_name(df: pd.DataFrame) -> pd.DataFrame:
+    if df is None or df.empty:
+        return df
+
+    df_copy = df.copy()
+
+    cleaned_cols = []
+    for i, col in enumerate(df_copy.columns):
+        name = str(col).strip().lower()
+
+        name = re.sub(r"[^\w\s]","_",name)
+        name = re.sub(r"\s+","_",name)
+        name = re.sub(r"_+","_",name).strip("_")
+
+        cleaned_cols.append(name if name else f"col_{i+1}")
+
+    df_copy.columns = cleaned_cols
+
+    return df_copy
+
+    
+
 
 
     
