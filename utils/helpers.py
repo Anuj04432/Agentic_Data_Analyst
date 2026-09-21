@@ -94,7 +94,7 @@ def clean_column_name(df: pd.DataFrame) -> pd.DataFrame:
     return df_copy
 
 
-def truncate_string(val, max_len):
+def truncate_string(val: object, max_len: int =50) -> str:
     if val is None or pd.isna(val):
         return "N/A"
 
@@ -105,6 +105,31 @@ def truncate_string(val, max_len):
     if max_len <= 3:
         return val[:max_len]
     return val[:max_len-3]+"..."
+
+
+def detect_outliers_iqr(series: pd.Series) -> tuple:
+    if series is None or series.empty or series.isna().all() or not pd.api.types.is_numeric_dtype(series):
+        return (0,0.0)
+
+    clean_series = series.dropna()
+    if len(clean_series) < 4:
+        return (0,0.0)
+
+    Q1 = clean_series.quantile(0.25)
+    Q3 = clean_series.quantile(0.75)
+    IQR = Q3-Q1
+    if IQR == 0:
+        return (0,0.0)
+
+    lower = Q1-1.5*IQR
+    upper = Q3+1.5*IQR
+    outliers = (clean_series < lower) | (clean_series > upper)
+
+    outlier_count = int(outliers.sum())
+    outlier_percent = round((outlier_count/len(clean_series))*100,2)
+
+    return (outlier_count,outlier_percent)
+    
 
     
 
