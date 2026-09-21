@@ -30,8 +30,9 @@ def get_column_types(df: pd.DataFrame) -> dict[str, list[str]]:
     if df is None or df.empty:
         return {"num_cols" : [],
                 "cat_cols" : [],
-                "date_cols" : [],
-                "boolean" : []}
+                "datetime" : [],
+                "boolean" : [],
+                "all": []}
     return {
         "num_cols": df.select_dtypes(include="number").columns.tolist(),
         "cat_cols":df.select_dtypes(include=["object","category"]).columns.tolist(),
@@ -43,7 +44,7 @@ def get_column_types(df: pd.DataFrame) -> dict[str, list[str]]:
 
 def get_column_summary(df: pd.DataFrame) -> pd.DataFrame:
     if df is None or df.empty:
-        return "Dataset is empty so use a valid dataset"
+        return pd.DataFrame()
 
     summary = []
     total_rows = len(df)
@@ -92,6 +93,19 @@ def clean_column_name(df: pd.DataFrame) -> pd.DataFrame:
     df_copy.columns = cleaned_cols
 
     return df_copy
+
+
+def truncate_string(val, max_len):
+    if val is None or pd.isna(val):
+        return "N/A"
+
+    val = str(val)
+    val = val.strip()
+    if len(val) <= max_len:
+        return val
+    if max_len <= 3:
+        return val[:max_len]
+    return val[:max_len-3]+"..."
 
     
 
