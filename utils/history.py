@@ -20,6 +20,25 @@ def save_history(file) -> Path:
         return file_path
     return None
 
+def get_sample_datasets() -> list[str]:
+    if not SAMPLE_DIR.exists():
+        return []
+
+    supported_extensions = {".csv", ".xlsx", ".xls", ".json", ".feather", ".db", ".sqlite", ".sqlite3"}
+
+    datasets = [
+        f.name for f in SAMPLE_DIR.iterdir()
+        if f.is_file() and f.suffix.lower() in supported_extensions and not f.name.startswith(".")
+    ]
+    return sorted(datasets)
+
+def get_sample_file_path(filename: str) -> Path:
+    file_path = SAMPLE_DIR/filename
+    if file_path.exists() and file_path.is_file():
+        return file_path
+    raise FileNotFoundError(f"Sample dataset '{filename}' not found in {SAMPLE_DIR}")
+
+
 
 def get_history() -> list[str]:
     datasets = set()
