@@ -201,3 +201,24 @@ def format_context_for_llm(df: pd.DataFrame, max_sample_rows: int  = 5) -> str:
     ])
 
     return "\n".join(lines)
+
+
+def infer_problem_type(df: pd.DataFrame, target_col: str) -> str:
+    if df is None or df.empty or target_col not in df.columns:
+        return "Unknown"
+    target = df[target_col]
+    if not pd.api.types.is_numeric_dtype(target):
+        return "Classification"
+
+    unique = target.nunique(dropna=True)
+    total_valid = target.notna().sum()
+
+    if total_valid == 0:
+        return "Unknown"
+
+    if unique <= 10 or (unique/total_valid < 0.05 and pd.api.types.is_integer_dtype(target)):
+        return "Classification"
+
+    return "Regression"
+
+
