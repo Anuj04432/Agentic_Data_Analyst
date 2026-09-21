@@ -57,9 +57,8 @@ def get_column_summary(df: pd.DataFrame) -> pd.DataFrame:
         unique_count = int(series.nunique(dropna=True))
 
         sample_vals = series.dropna().unique()[:3]
-        sample_str = ", ".join(str(val) for val in sample_vals)
-        if len(sample_str) > 50 :
-            sample_str = sample_str[:47] + "..."
+        sample_str =truncate_string(", ".join(str(val) for val in sample_vals),max_len=50)
+        
 
         summary.append({
             "columns": col,
