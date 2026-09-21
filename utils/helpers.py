@@ -168,11 +168,36 @@ def get_top_correlations(df: pd.DataFrame, threshold: float = 0.5, top_n:int = 1
     )
 
 
+def format_context_for_llm(df: pd.DataFrame, max_sample_rows: int  = 5) -> str:
+    """Generate a compact, token-efficient schema and data preview for LLM prompts.
+     """
+     
+    if df is None or df.empty:
+        return "No dataset loaded"
+    rows,cols = df.shape
 
-    
+    lines = [
+        "### Dataset Overview",
+        f"-Total Rows: {rows}",
+        f"-Total Columns: {cols}",
+        "",
+        "### Columns and Schema:",
+    ]
 
-    
+    for col in df.columns:
+        series = df[col]
+        dtype = str(series.dtype)
+        non_null = int(series.notna().sum())
+        unique = int(series.nunique(dropna=True))
 
+        lines.append(f"- '{col}' ({dtype}): {non_null}/{rows} non-null, {unique} unique values")
 
+    lines.extend([
+        "",
+        f"### First {min(max_sample_rows, rows)} Sample Rows:",
+        "```",
+        df.head(max_sample_rows).to_string(index=False),
+        "```",
+    ])
 
-    
+    return "\n".join(lines)
