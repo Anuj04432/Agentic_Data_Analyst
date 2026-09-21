@@ -127,8 +127,48 @@ def detect_outliers_iqr(series: pd.Series) -> tuple:
 
     outlier_count = int(outliers.sum())
     outlier_percent = round((outlier_count/len(clean_series))*100,2)
-
     return (outlier_count,outlier_percent)
+
+
+def get_top_correlations(df: pd.DataFrame, threshold: float = 0.5, top_n:int = 10) -> pd.DataFrame:
+    """Find the most strongly correlated pairs of numeric columns above a given
+  threshold."""
+    
+    result_cols = ["Feature 1", "Feature 2", "Correlation", "Absolute Correlation"]
+    if df is None or df.empty:
+        return pd.DataFrame(columns=result_cols)
+
+    df_num = df.select_dtypes(include="number")
+    cols = df_num.columns
+    
+    if len(df_num.columns) < 2:
+        return pd.DataFrame(columns=result_cols)
+
+    records = []
+    corr_matrix = df_num.corr()
+    for i in range(len(cols)):
+        for j in range(i+1,len(cols)):
+            col1,col2 = cols[i],cols[j]
+            val = corr_matrix.iloc[i,j]
+
+            if pd.notna(val) and abs(val) >= threshold:
+                records.append({
+                    "Feature 1": col1,
+                    "Feature 2":col2,
+                    "Correlation": round(float(val),3),
+                    "Absolute Correlation": round(abs(float(val)),3)
+                })
+
+
+    if not records:
+        return pd.DataFrame(columns=result_cols)
+    result_df = pd.DataFrame(records)
+    return (
+        result_df.sort_values(by="Absolute Correlation", ascending=False).head(top_n).reset_index(drop=True)
+    )
+
+
+
     
 
     
