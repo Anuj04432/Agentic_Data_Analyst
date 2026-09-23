@@ -3,11 +3,9 @@ from pathlib import Path
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 UPLOAD_DIR = PROJECT_ROOT / "data" / "uploaded"
 SAMPLE_DIR = PROJECT_ROOT / "data" / "sample"
-HISTORY_DIR = PROJECT_ROOT / "utils" / "saved_history"
 
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 SAMPLE_DIR.mkdir(parents=True, exist_ok=True)
-HISTORY_DIR.mkdir(parents=True,exist_ok=True)
 
 def save_history(file) -> Path:
     if file:
@@ -42,7 +40,7 @@ def get_sample_file_path(filename: str) -> Path:
 
 def get_history() -> list[str]:
     datasets = set()
-    for dir in  [SAMPLE_DIR,UPLOAD_DIR,HISTORY_DIR]:
+    for dir in [UPLOAD_DIR, SAMPLE_DIR]:
         if dir.exists():
             for f in dir.iterdir():
                 if f.is_file() and not f.name.startswith(".") and f.name != ".gitkeep":
@@ -51,8 +49,8 @@ def get_history() -> list[str]:
 
 
 def get_file_path(filename: str) -> Path:
-    for dir in [UPLOAD_DIR, SAMPLE_DIR, HISTORY_DIR]:
-        candidate = dir/filename
+    for dir in [UPLOAD_DIR, SAMPLE_DIR]:
+        candidate = dir / filename
         if candidate.exists() and candidate.is_file():
             return candidate
-    raise FileNotFoundError(f"Dataset '{filename}' not found in the data directories ")
+    raise FileNotFoundError(f"Dataset '{filename}' not found in the data directories")
