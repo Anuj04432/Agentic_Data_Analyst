@@ -14,7 +14,7 @@ init_session_state()
 with st.sidebar:
     st.header("📂Data Source")
     uploaded_file = st.file_uploader("Upload dataset", type=["csv","xlsx","xls","json","feather","sqlite","db"])
-    recent_datasets = st.selectbox("Recent datasets",options=["None"]+get_history())
+    recent_datasets = st.selectbox("Recently used datasets",options=["None"]+get_history())
 
 if uploaded_file is not None:
     save_history(uploaded_file)
