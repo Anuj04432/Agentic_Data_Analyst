@@ -10,6 +10,10 @@ from analysis.missing_values import (
     get_missingness_overview,
     impute_missing_values,
 )
+from analysis.duplicates import (
+    get_duplicate_summary,
+    drop_duplicates_clean,
+)
 
 __all__ = [
     "get_numeric_summary",
@@ -18,4 +22,6 @@ __all__ = [
     "get_missing_summary",
     "get_missingness_overview",
     "impute_missing_values",
+    "get_duplicate_summary",
+    "drop_duplicates_clean",
 ]
