@@ -108,11 +108,11 @@ Agentic_Data_Analyst/
 ---
 
 ### Phase 2: Statistical & Analytical Engine (`analysis/`)
-- [ ] **Step 2.1: `analysis/statistics.py`**:
+- [x] **Step 2.1: `analysis/statistics.py`**:
   - Full descriptive statistics: mean, std, quantiles, skewness, kurtosis, variance.
-- [ ] **Step 2.2: `analysis/missing_values.py`**:
+- [x] **Step 2.2: `analysis/missing_values.py`**:
   - Missing value counts, percentages, missingness matrix / pattern detection, imputation methods.
-- [ ] **Step 2.3: `analysis/duplicates.py`**:
+- [x] **Step 2.3: `analysis/duplicates.py`**:
   - Duplicate row detection, filtering, and dropping.
 - [ ] **Step 2.4: `analysis/correlations.py`**:
   - Pearson & Spearman correlation matrices, top positively and negatively correlated pairs.
