@@ -15,6 +15,9 @@ STATUS RECAP (TODAY'S PROGRESS)
    - get_missing_summary(df): Column breakdown sorted by missing % descending.
    - get_missingness_overview(df): KPI metrics (total cells, missing cells, overall %, cols with missing).
    - impute_missing_values(df, strategy, custom_values): Clean/fill missing values supporting mean, median, mode, drop_rows, drop_cols, auto, and custom values.
+4. Implemented Step 2.3 ('analysis/duplicates.py'):
+   - get_duplicate_summary(df, subset): Summarizes duplicate rows (count, percentage, has_duplicates flag, and filtered duplicate DataFrame with keep=False).
+   - drop_duplicates_clean(df, subset, keep): Safely removes duplicates on a DataFrame copy, resetting index and returning (cleaned_df, removed_count). Supports 'first', 'last', and False/'none'/'drop_all'.
 
 
 ================================================================================
