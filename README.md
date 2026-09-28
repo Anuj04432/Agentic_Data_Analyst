@@ -8,7 +8,7 @@ This application bridges the gap between raw business datasets and actionable de
 
 ## 📌 Table of Contents
 - [1. System Architecture](#1-system-architecture)
-- [2. Current Project State](#2-current-project-state)
+- [2. Current Project State  ](#2-current-project-state)
 - [3. Master Implementation Roadmap](#3-master-implementation-roadmap)
   - [Phase 1: Bug Fixes & Performance Optimization](#phase-1-bug-fixes--performance-optimization)
   - [Phase 2: Comprehensive Exploratory Data Analysis (EDA) UI](#phase-2-comprehensive-exploratory-data-analysis-eda-ui)
