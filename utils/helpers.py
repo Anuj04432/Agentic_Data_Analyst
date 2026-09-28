@@ -1,3 +1,5 @@
+"""Helper functions that helps to format the data"""
+
 import pandas as pd
 import re
 
