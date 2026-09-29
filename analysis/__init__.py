@@ -14,6 +14,12 @@ from analysis.duplicates import (
     get_duplicate_summary,
     drop_duplicates_clean,
 )
+from analysis.correlations import (
+    calculate_correlation_matrix,
+    get_top_correlations,
+    get_target_correlations,
+    get_correlation_overview,
+)
 
 __all__ = [
     "get_numeric_summary",
@@ -24,4 +30,9 @@ __all__ = [
     "impute_missing_values",
     "get_duplicate_summary",
     "drop_duplicates_clean",
+    "calculate_correlation_matrix",
+    "get_top_correlations",
+    "get_target_correlations",
+    "get_correlation_overview",
 ]
+
