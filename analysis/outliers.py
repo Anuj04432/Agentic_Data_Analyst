@@ -120,3 +120,21 @@ def get_outliers_summary(df: pd.DataFrame, method: str ="iqr") -> pd.DataFrame:
     res_df = pd.DataFrame(outlier_df)
     return res_df.sort_values(by="Outlier Count",ascending=False).reset_index(drop=True)
 
+def cap_outliers(df:pd.DataFrame, column: str, factor: float = 1.5) -> tuple:
+    if df is None or df.empty:
+        return (df, 0)
+    if column not in df.columns:
+        return (df.copy(), 0)
+    if not pd.api.types.is_numeric_dtype(df[column]):
+        return (df.copy(), 0)
+
+    info = detect_outliers_iqr(df[column],factor=factor)
+
+    if not info["has_outliers"] or info["lower_bound"] is None or info["upper_bound"] is None:
+        return (df.copy(), 0)
+
+    df_cleaned = df.copy()
+
+    df_cleaned[column] = df_cleaned[column].clip(lower=info["lower_bound"],upper=info["upper_bound"])
+
+    return (df_cleaned, info["outlier_count"])
