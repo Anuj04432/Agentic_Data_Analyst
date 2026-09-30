@@ -138,3 +138,29 @@ def cap_outliers(df:pd.DataFrame, column: str, factor: float = 1.5) -> tuple:
     df_cleaned[column] = df_cleaned[column].clip(lower=info["lower_bound"],upper=info["upper_bound"])
 
     return (df_cleaned, info["outlier_count"])
+
+def drop_outliers(df: pd.DataFrame, columns: list[str] = None, factor: float = 1.5) -> tuple[pd.DataFrame, int]:
+    if df is None or df.empty:
+        return (df, 0)
+
+    df_copy = df.copy()
+
+    if columns is None:
+        target_cols = df_copy.select_dtypes(include="number").columns.tolist()
+    else:
+        target_cols = [c for c in columns if c in df_copy.columns and pd.api.types.is_numeric_dtype(df_copy[c])]
+
+    if not target_cols:
+        return (df_copy, 0)
+
+    indices_to_drop = set()
+    for col in target_cols:
+        info = detect_outliers_iqr(df_copy[col], factor=factor)
+        if info["has_outliers"] and info["outlier_indices"]:
+            indices_to_drop.update(info["outlier_indices"])
+
+    if not indices_to_drop:
+        return (df_copy, 0)
+
+    df_cleaned = df_copy.drop(index=list(indices_to_drop)).reset_index(drop=True)
+    return (df_cleaned, len(indices_to_drop))
