@@ -1,0 +1,112 @@
+================================================================================
+AGENTIC DATA ANALYST - ACTION PLAN & ROADMAP REFERENCE
+================================================================================
+
+STATUS RECAP (COMPLETED PROGRESS)
+--------------------------------------------------------------------------------
+1. Centralized Data Directories:
+   - Consolidated sample files from 'utils/saved_history' into 'data/sample/'.
+   - Updated 'utils/history.py' to discover and resolve paths for uploaded and sample datasets.
+
+2. Implemented Step 2.1 ('analysis/statistics.py'):
+   - get_numeric_summary(df): Generates count, mean, std, var, min, 25%, 50%, 75%, max, IQR, skewness, kurtosis.
+   - get_categorical_summary(df): Generates unique count, mode value, mode frequency %, missing counts/%.
+   - get_distribution_stats(series): Computes skewness/kurtosis heuristics and human-readable distribution labels.
+
+3. Implemented Step 2.2 ('analysis/missing_values.py'):
+   - get_missing_summary(df): Column breakdown sorted by missing % descending.
+   - get_missingness_overview(df): KPI metrics (total cells, missing cells, overall %, cols with missing).
+   - impute_missing_values(df, strategy, custom_values): Clean/fill missing values supporting mean, median, mode, drop_rows, drop_cols, auto, and custom values.
+
+4. Implemented Step 2.3 ('analysis/duplicates.py'):
+   - get_duplicate_summary(df, subset): Summarizes duplicate rows (count, percentage, has_duplicates flag, and filtered duplicate DataFrame with keep=False).
+   - drop_duplicates_clean(df, subset, keep): Safely removes duplicates on a DataFrame copy, resetting index and returning (cleaned_df, removed_count). Supports 'first', 'last', and False/'none'/'drop_all'.
+
+5. Implemented Step 2.4 ('analysis/correlations.py'):
+   - calculate_correlation_matrix(df, method): Safe numeric correlation calculation supporting pearson, spearman, kendall with validation, try-except, and edge-case handling.
+   - get_top_correlations(df, threshold, top_n, method): Extracts unique upper-triangle pairs, rates direction and strength (Very Strong, Strong, Moderate, Weak), and ranks by absolute correlation.
+   - get_target_correlations(df, target_column, method): Computes correlation of all numerical features against a specific target variable.
+   - get_correlation_overview(df, threshold): Returns high-level summary metrics (numeric column count, high correlation count, strongest positive/negative pairs, multicollinearity alert).
+   - Exported in 'analysis/__init__.py' and committed separately in git.
+
+6. Implemented Step 2.5 ('analysis/outliers.py') [COMPLETED TODAY]:
+   - detect_outliers_iqr(series, factor=1.5): Outlier detection via Tukey's IQR rule with full metadata (count, pct, lower/upper bounds, indices, flag).
+   - detect_outliers_zscore(series, threshold=3.0): Outlier detection via Standard Deviation / Z-Score with zero-variance protection.
+   - get_outliers_summary(df, method='iqr'): Tabular summary across all numeric columns sorted descending by outlier count.
+   - cap_outliers(df, column, factor=1.5): Winsorization/clamping without row deletion, returning (cleaned_df, modified_count).
+   - drop_outliers(df, columns=None, factor=1.5): Outlier row removal across specified/all numeric columns with deduplicated index sets, returning (cleaned_df, dropped_rows_count).
+   - Fully verified with extensive unit and edge-case test suites.
+
+
+================================================================================
+ACTION PLAN FOR TOMORROW: STEP 2.6 & STEP 2.7
+================================================================================
+
+All analysis modules contain pure functions (input: DataFrame/Series -> output: DataFrame/dict/tuple).
+NO Streamlit UI code (st.*) belongs in the analysis/ folder.
+
+--------------------------------------------------------------------------------
+STEP 2.6: analysis/profiling.py (Dataset Health & Audit)
+--------------------------------------------------------------------------------
+Create and implement 'analysis/profiling.py' with the following pure functions:
+
+1. calculate_health_score(df: pd.DataFrame) -> dict
+   - Purpose: Composite quality score (0 - 100) and letter grade rating data hygiene.
+   - Deduction Rules:
+     * Missing values: Deduct up to -30 points proportional to global missing %:
+       - min(30.0, round(missing_pct * 1.5, 1))
+     * Duplicate rows: Deduct up to -20 points proportional to duplicate row %:
+       - min(20.0, round(duplicate_pct * 2.0, 1))
+     * Outlier presence: Deduct up to -20 points based on % of numeric columns with severe outliers (>5% outlier rate):
+       - min(20.0, round((cols_with_outliers / total_num_cols) * 20.0, 1))
+     * Constant / Zero-variance columns: Deduct up to -15 points:
+       - min(15.0, constant_cols_count * 5.0)
+   - Final Score:
+     * score = max(0.0, min(100.0, round(100.0 - total_deductions, 1)))
+   - Letter Grade Mapping:
+     * A: 90 - 100
+     * B: 80 - 89
+     * C: 70 - 79
+     * D: 60 - 69
+     * F: < 60
+   - Returns dict:
+     {
+         "health_score": float,
+         "grade": str,
+         "deductions": {
+             "missing": float,
+             "duplicates": float,
+             "outliers": float,
+             "constant_cols": float
+         },
+         "summary": str
+     }
+
+2. generate_dataset_audit(df: pd.DataFrame) -> dict
+   - Purpose: Comprehensive master diagnostic audit combining all core analysis engines into a single dashboard-ready report.
+   - Aggregates:
+     * Dataset Shape & Memory: rows, columns, memory usage (bytes & formatted MB).
+     * Data Types Breakdown: count of numeric, categorical, datetime, boolean columns.
+     * Missingness Overview: total missing cells, overall missing %, columns with missing values.
+     * Duplicate Overview: duplicate row count, duplicate %.
+     * Outlier Overview: count of numeric columns with outliers, top outlier columns.
+     * Health Score & Grade: output of calculate_health_score(df).
+     * Actionable Warnings (list of string alerts for user):
+       - E.g.: "High missing data (>30%) in column: 'Age'"
+       - E.g.: "Found 150 duplicate rows (5.2% of dataset)"
+       - E.g.: "Column 'User_ID' is constant/zero-variance"
+       - E.g.: "High multicollinearity detected between 'Income' and 'Net_Worth'"
+   - Returns dict:
+     Structured dictionary ready for UI cards, audit tabs, and executive summaries.
+
+
+--------------------------------------------------------------------------------
+STEP 2.7: Exporting & Integration
+--------------------------------------------------------------------------------
+1. Export all new functions in 'analysis/__init__.py':
+   - detect_outliers_iqr, detect_outliers_zscore, get_outliers_summary, cap_outliers, drop_outliers
+   - calculate_health_score, generate_dataset_audit
+2. Wire analysis functions into 'ui/Data_Analysis.py' and associated tabs/components:
+   - Outliers tab: interactive threshold sliders, summary table, capping/dropping action buttons.
+   - Health/Audit tab: grade badge (A-F), metric cards, interactive warning list.
+================================================================================
