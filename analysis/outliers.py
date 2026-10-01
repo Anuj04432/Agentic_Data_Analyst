@@ -113,12 +113,12 @@ def get_outliers_summary(df: pd.DataFrame, method: str ="iqr") -> pd.DataFrame:
                 "Max":round(float(series.max()),4) if pd.notna(series.max()) else None,
                 "Has Outliers": detect_outlier["has_outliers"],
             })
-
     if not outlier_df:
         return pd.DataFrame(columns=default_cols)
 
     res_df = pd.DataFrame(outlier_df)
     return res_df.sort_values(by="Outlier Count",ascending=False).reset_index(drop=True)
+
 
 def cap_outliers(df:pd.DataFrame, column: str, factor: float = 1.5) -> tuple:
     if df is None or df.empty:
@@ -134,10 +134,10 @@ def cap_outliers(df:pd.DataFrame, column: str, factor: float = 1.5) -> tuple:
         return (df.copy(), 0)
 
     df_cleaned = df.copy()
-
     df_cleaned[column] = df_cleaned[column].clip(lower=info["lower_bound"],upper=info["upper_bound"])
-
     return (df_cleaned, info["outlier_count"])
+
+
 
 def drop_outliers(df: pd.DataFrame, columns: list[str] = None, factor: float = 1.5) -> tuple[pd.DataFrame, int]:
     if df is None or df.empty:
@@ -163,4 +163,4 @@ def drop_outliers(df: pd.DataFrame, columns: list[str] = None, factor: float = 1
         return (df_copy, 0)
 
     df_cleaned = df_copy.drop(index=list(indices_to_drop)).reset_index(drop=True)
-    return (df_cleaned, len(indices_to_drop))
+    return (df_cleaned, len(indices_to_drop))
