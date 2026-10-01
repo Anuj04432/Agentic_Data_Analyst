@@ -20,6 +20,17 @@ from analysis.correlations import (
     get_target_correlations,
     get_correlation_overview,
 )
+from analysis.outliers import (
+    detect_outliers_iqr,
+    detect_outliers_zscore,
+    get_outliers_summary,
+    cap_outliers,
+    drop_outliers,
+)
+from analysis.profiling import (
+    calculate_health_score,
+    generate_dataset_audit,
+)
 
 __all__ = [
     "get_numeric_summary",
@@ -34,5 +45,12 @@ __all__ = [
     "get_top_correlations",
     "get_target_correlations",
     "get_correlation_overview",
+    "detect_outliers_iqr",
+    "detect_outliers_zscore",
+    "get_outliers_summary",
+    "cap_outliers",
+    "drop_outliers",
+    "calculate_health_score",
+    "generate_dataset_audit",
 ]
 
