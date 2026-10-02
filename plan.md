@@ -124,7 +124,7 @@ Agentic_Data_Analyst/
 ---
 
 ### Phase 3: Modular UI Components (`components/`)
-- [ ] **Step 3.1: `components/dataset_summary.py`**:
+- [x] **Step 3.1: `components/dataset_summary.py`**:
   - KPI metric cards: Total Rows, Columns, Missing (%), Duplicates, Memory Usage.
 - [ ] **Step 3.2: `components/data_preview.py`**:
   - Paginated / head preview with column search and filter.
