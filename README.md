@@ -6,52 +6,7 @@ This application bridges the gap between raw business datasets and actionable de
 
 ---
 
-## 📌 Table of Contents
-- [1. System Architecture](#1-system-architecture)
-- [2. Completed Modules & Capabilities](#2-completed-modules--capabilities)
-- [3. Project Folder Architecture](#3-project-folder-architecture)
-- [4. Master Implementation Roadmap](#4-master-implementation-roadmap)
-- [5. How to Run & Test](#5-how-to-run--test)
-
----
-
-## 1. System Architecture
-
-```mermaid
-flowchart TD
-    User([User]) -->|Uploads CSV / Excel / SQLite / JSON / Feather| Ingestion[1. Ingestion Engine\nutils/file_handler.py]
-    Ingestion --> History[History & Session State\nutils/history.py | utils/session_state.py]
-    
-    History --> AnalysisEngine[2. Pure Statistical & Analysis Engines\nanalysis/]
-    
-    subgraph AnalysisModule [Analysis Engines analysis/]
-        AnalysisEngine --> Stats[statistics.py\nDescriptive Stats, Skewness, Kurtosis]
-        AnalysisEngine --> Miss[missing_values.py\nOverview, Patterns, Imputation]
-        AnalysisEngine --> Dups[duplicates.py\nDetection & Removal]
-        AnalysisEngine --> Corr[correlations.py\nPearson, Spearman, Top Pairs]
-        AnalysisEngine --> Outliers[outliers.py\nIQR, Z-Score, Capping, Dropping]
-        AnalysisEngine --> Profiling[profiling.py\nHealth Score 0-100, Grade A-F, Audit & Alerts]
-    end
-    
-    Profiling --> UI[3. UI Views & Tabs\nui/]
-    UI --> Tab1[Tab 1: Comprehensive EDA\nui/Data_Analysis.py]
-    UI --> Tab2[Tab 2: Visual Exploration\nui/Data_Visualization.py]
-    UI --> Tab3[Tab 3: Autonomous AI Analyst\nui/Ask_your_data.py]
-    UI --> Tab4[Tab 4: Predictive Auto-ML\nui/Predictive_Modeling.py]
-    
-    subgraph AgenticCore [Autonomous AI Analyst agent/]
-        Tab3 -->|Natural Language Query| PromptEngine[agent/prompts.py]
-        PromptEngine --> LLM[Gemini / OpenAI Connector\nagent/agent.py]
-        LLM -->|Executable Code| Sandbox[Safe Code Executor\nagent/tools.py]
-        Sandbox -->|Tables & Charts| Synthesis[Insight Generation]
-    end
-    
-    Synthesis --> User
-```
-
----
-
-## 2. Completed Modules & Capabilities
+## 1. Completed Modules & Capabilities
 
 ### 🔬 Pure Statistical & Analytical Engine (`analysis/`)
 All analysis modules are pure functions (taking `pd.DataFrame` or `pd.Series` and returning structured dicts, DataFrames, or tuples) keeping backend logic cleanly decoupled from UI code:
@@ -90,7 +45,7 @@ All analysis modules are pure functions (taking `pd.DataFrame` or `pd.Series` an
 
 ---
 
-## 3. Project Folder Architecture
+## 2. Project Folder Architecture
 
 ```
 Agentic_Data_Analyst/
@@ -162,7 +117,7 @@ Agentic_Data_Analyst/
 
 ---
 
-## 4. Master Implementation Roadmap
+## 3. Master Implementation Roadmap
 
 ### Phase 1: Core Foundation & Bug Fixes
 - [x] Consolidate sample datasets into `data/sample/`.
@@ -209,7 +164,7 @@ Agentic_Data_Analyst/
 
 ---
 
-## 5. How to Run & Test
+## 4. How to Run & Test
 
 ### 1. Prerequisites & Environment Setup
 - Python 3.12+
