@@ -66,13 +66,15 @@ Create reusable Streamlit display widgets in the 'components/' folder:
    - Status: Fully implemented with dual-input extraction & Streamlit 5-column metric cards.
    - Verification: 7 unit tests in 'tests/test_dataset_summary.py' passing (0.04s).
 
-2. 'components/data_preview.py' (Interactive Table):
+2. 'components/data_preview.py' (Interactive Table) [COMPLETED]:
    - Purpose: Clean paginated data preview.
-   - Features: Search bar to filter rows, column selector to filter displayed columns, row count selector (head 10, 25, 50, 100, All).
+   - Features: Search bar to filter rows, column selector to filter displayed columns, row count selector (head 10, 25, 50, 100, All), CSV download button.
+   - Verification: 11 unit tests in 'tests/test_data_preview.py' passing.
 
-3. 'components/column_selector.py' (Smart Column Dropdowns):
+3. 'components/column_selector.py' (Smart Column Dropdowns) [COMPLETED]:
    - Purpose: Dropdown components that automatically filter columns based on analytical intent.
-   - Features: Grouped by Numeric only, Categorical only, Datetime only, or All columns.
+   - Features: Type classification (Numeric, Categorical, Datetime, Boolean, All), single-select with placeholder/defaults, multi-select with defaults & bounds, dynamic type switcher.
+   - Verification: 17 unit tests in 'tests/test_column_selector.py' passing.
 
 4. 'components/analysis_result.py' (Styled Cards & Badges):
    - Purpose: Render styled HTML/Streamlit cards for:

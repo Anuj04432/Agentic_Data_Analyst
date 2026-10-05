@@ -11,6 +11,13 @@ from components.data_preview import (
     paginate_data,
     render_data_preview,
 )
+from components.column_selector import (
+    classify_columns,
+    filter_columns_by_type,
+    render_column_select,
+    render_column_multiselect,
+    render_type_aware_selector,
+)
 
 __all__ = [
     "extract_summary_metrics",
@@ -18,5 +25,10 @@ __all__ = [
     "filter_preview_data",
     "paginate_data",
     "render_data_preview",
+    "classify_columns",
+    "filter_columns_by_type",
+    "render_column_select",
+    "render_column_multiselect",
+    "render_type_aware_selector",
 ]
 
