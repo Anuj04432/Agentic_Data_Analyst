@@ -18,6 +18,16 @@ from components.column_selector import (
     render_column_multiselect,
     render_type_aware_selector,
 )
+from components.analysis_result import (
+    get_health_grade_color,
+    get_distribution_badge_info,
+    get_correlation_badge_info,
+    render_health_grade_badge,
+    render_health_score_card,
+    render_actionable_warnings,
+    render_distribution_badge,
+    render_correlation_badge,
+)
 
 __all__ = [
     "extract_summary_metrics",
@@ -30,5 +40,13 @@ __all__ = [
     "render_column_select",
     "render_column_multiselect",
     "render_type_aware_selector",
+    "get_health_grade_color",
+    "get_distribution_badge_info",
+    "get_correlation_badge_info",
+    "render_health_grade_badge",
+    "render_health_score_card",
+    "render_actionable_warnings",
+    "render_distribution_badge",
+    "render_correlation_badge",
 ]
 
