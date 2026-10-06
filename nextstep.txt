@@ -84,6 +84,11 @@ Create reusable Streamlit display widgets in the 'components/' folder:
      * Distribution shape badges (Normal, Right-Skewed, Left-Skewed) and correlation badges.
    - Verification: 20 unit tests in 'tests/test_analysis_result.py' passing.
 
+5. 'components/sidebar.py' (Shared Ingestion & Dataset Badge) [COMPLETED]:
+   - Purpose: Reusable sidebar for dataset ingestion and status monitoring.
+   - Features: Multi-source ingestion (Upload file, Sample datasets, Recent history), safe file parsing, active dataset metadata card (rows, cols, memory, dtypes count), and one-click Unload/Reset button.
+   - Verification: 13 unit tests in 'tests/test_sidebar.py' passing (0.04s). Connected cleanly to 'app.py'.
+
 
 --------------------------------------------------------------------------------
 PART 2: PHASE 4 - EXPLORATORY DATA ANALYSIS VIEW ('ui/Data_Analysis.py')
