@@ -28,6 +28,15 @@ from components.analysis_result import (
     render_distribution_badge,
     render_correlation_badge,
 )
+from components.sidebar import (
+    get_supported_file_extensions,
+    get_dataset_metadata,
+    format_sidebar_badge_html,
+    load_dataset_file,
+    render_active_dataset_card,
+    render_data_source_picker,
+    render_sidebar,
+)
 
 __all__ = [
     "extract_summary_metrics",
@@ -48,5 +57,12 @@ __all__ = [
     "render_actionable_warnings",
     "render_distribution_badge",
     "render_correlation_badge",
+    "get_supported_file_extensions",
+    "get_dataset_metadata",
+    "format_sidebar_badge_html",
+    "load_dataset_file",
+    "render_active_dataset_card",
+    "render_data_source_picker",
+    "render_sidebar",
 ]
 
