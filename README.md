@@ -1,4 +1,4 @@
-# 🤖 Agentic Data Analyst
+# 🤖 MyAnalyst 
 
 An intelligent, autonomous data analysis assistant built with **Streamlit**, **Pandas**, **Scikit-Learn**, and **LLMs**.
 
