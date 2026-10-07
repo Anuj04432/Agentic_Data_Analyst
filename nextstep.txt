@@ -89,8 +89,19 @@ Create reusable Streamlit display widgets in the 'components/' folder:
    - Features: Multi-source ingestion (Upload file, Sample datasets, Recent history), safe file parsing, active dataset metadata card (rows, cols, memory, dtypes count), and one-click Unload/Reset button.
    - Verification: 13 unit tests in 'tests/test_sidebar.py' passing (0.04s). Connected cleanly to 'app.py'.
 
+6. 'components/chart_selector.py' (Interactive Plot Configuration Panel) [COMPLETED]:
+   - Purpose: Dynamic chart type and dimension selector widget.
+   - Features: Type-aware chart discovery, dynamic X/Y/Color axis configuration, histogram bins slider, correlation heatmap multiselect, and standardized ChartConfig validation contract.
+   - Verification: 14 unit tests in 'tests/test_chart_selector.py' passing & interactive preview in 'tests/test_chart_selector_ui.py'.
+
+7. 'components/chat_interface.py' (Conversational Chat Interface) [COMPLETED]:
+   - Purpose: Reusable Streamlit chat layout for AI data analyst.
+   - Features: Multi-modal message rendering with role avatars, collapsible reasoning traces, syntax-highlighted code blocks, tabular views, figure rendering, starter prompts, and one-click chat clear.
+   - Verification: 9 unit tests in 'tests/test_chat_interface.py' passing & interactive preview in 'tests/test_chat_interface_ui.py'.
+
 
 --------------------------------------------------------------------------------
+
 PART 2: PHASE 4 - EXPLORATORY DATA ANALYSIS VIEW ('ui/Data_Analysis.py')
 --------------------------------------------------------------------------------
 Assemble the components and analysis engines into the full Tab 1 EDA view in 'ui/Data_Analysis.py':
