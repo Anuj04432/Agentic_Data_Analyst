@@ -37,6 +37,19 @@ from components.sidebar import (
     render_data_source_picker,
     render_sidebar,
 )
+from components.chart_selector import (
+    get_available_chart_types,
+    validate_chart_config,
+    render_chart_selector,
+)
+from components.chat_interface import (
+    create_chat_message,
+    validate_chat_message,
+    render_single_message,
+    render_chat_history,
+    render_chat_empty_state,
+    render_chat_interface,
+)
 
 __all__ = [
     "extract_summary_metrics",
@@ -64,5 +77,16 @@ __all__ = [
     "render_active_dataset_card",
     "render_data_source_picker",
     "render_sidebar",
+    "get_available_chart_types",
+    "validate_chart_config",
+    "render_chart_selector",
+    "create_chat_message",
+    "validate_chat_message",
+    "render_single_message",
+    "render_chat_history",
+    "render_chat_empty_state",
+    "render_chat_interface",
 ]
+
+
 
