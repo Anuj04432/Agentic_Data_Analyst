@@ -1,199 +1,253 @@
-# 🤖 MyAnalyst 
+# 🤖 MyAnalyst: Autonomous Data Analysis & Exploration Platform
 
-An intelligent, autonomous data analysis assistant built with **Streamlit**, **Pandas**, **Scikit-Learn**, and **LLMs**.
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11%2B-blue?logo=python&logoColor=white" alt="Python Version" />
+  <img src="https://img.shields.io/badge/Framework-Streamlit-FF4B4B?logo=streamlit&logoColor=white" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/Data-Pandas%20%7C%20NumPy-150458?logo=pandas&logoColor=white" alt="Pandas" />
+  <img src="https://img.shields.io/badge/Visualization-Plotly%20%7C%20Seaborn-3F4F75?logo=plotly&logoColor=white" alt="Plotly" />
+  <img src="https://img.shields.io/badge/Tests-111%20Passed-success?logo=pytest&logoColor=white" alt="Pytest" />
+  <img src="https://img.shields.io/badge/Architecture-Modular%20%26%20Decoupled-purple" alt="Architecture" />
+</p>
 
-This application bridges the gap between raw business datasets and actionable decisions by combining traditional Exploratory Data Analysis (EDA) with an autonomous AI agent capable of answering natural language questions, generating charts on the fly, uncovering hidden anomalies, and building predictive models.
-
----
-
-## 1. Completed Modules & Capabilities
-
-### 🔬 Pure Statistical & Analytical Engine (`analysis/`)
-All analysis modules are pure functions (taking `pd.DataFrame` or `pd.Series` and returning structured dicts, DataFrames, or tuples) keeping backend logic cleanly decoupled from UI code:
-
-1. **`analysis/profiling.py` (Dataset Health & Diagnostic Audit)**:
-   - `calculate_health_score(df)`: Computes an objective data hygiene score (`0 - 100`) and letter grade (`A` through `F`) with bounded deduction penalties for missingness (up to -30), duplicates (up to -20), severe outliers (up to -20), and zero-variance constant columns (up to -15).
-   - `generate_dataset_audit(df)`: Master diagnostic audit aggregating shape, memory footprint, column type distribution, duplicate counts, outlier counts, health scores, and actionable human-readable warning alerts.
-2. **`analysis/outliers.py` (Anomaly Detection & Cleaning)**:
-   - `detect_outliers_iqr(series, factor=1.5)`: Tukey's IQR rule with lower/upper fences, indices, and flags.
-   - `detect_outliers_zscore(series, threshold=3.0)`: Standard deviation / Z-Score anomaly detector with zero-variance protection.
-   - `get_outliers_summary(df, method='iqr')`: Tabular summary across all numeric columns sorted descending by outlier count.
-   - `cap_outliers(df, column, factor=1.5)`: Non-destructive Winsorization clamping.
-   - `drop_outliers(df, columns=None, factor=1.5)`: Deduplicated outlier row removal.
-3. **`analysis/correlations.py` (Multivariate Relationships)**:
-   - `calculate_correlation_matrix(df, method)`: Safe numeric correlation supporting Pearson, Spearman, and Kendall.
-   - `get_top_correlations(df, threshold, top_n)`: Unpacks upper-triangle pairs, measures direction and strength (Very Strong, Strong, Moderate, Weak), and ranks by absolute correlation.
-   - `get_target_correlations(df, target_column)`: Feature-to-target correlation ranking.
-   - `get_correlation_overview(df)`: Multicollinearity warnings and high-level correlation metrics.
-4. **`analysis/missing_values.py` (Missingness Diagnostics & Imputation)**:
-   - `get_missing_summary(df)`: Column-level breakdown sorted by missing percentage.
-   - `get_missingness_overview(df)`: KPI metrics (total missing cells, global missing %, affected columns).
-   - `impute_missing_values(df, strategy)`: Supports `mean`, `median`, `mode`, `drop_rows`, `drop_cols`, and custom mappings.
-5. **`analysis/duplicates.py` (Duplicate Detection & Removal)**:
-   - `get_duplicate_summary(df, subset)`: Detects redundant rows, calculating counts and percentages.
-   - `drop_duplicates_clean(df, subset, keep)`: Safe deduplication on DataFrame copies with index resetting.
-6. **`analysis/statistics.py` (Descriptive & Distributional Stats)**:
-   - `get_numeric_summary(df)`: Comprehensive metrics including mean, std, quantiles, IQR, skewness, and kurtosis.
-   - `get_categorical_summary(df)`: Unique counts, mode values, mode frequency percentages, and missing counts.
-   - `get_distribution_stats(series)`: Skewness/kurtosis heuristics and human-readable distribution shape classification.
-
-### 🛠️ Foundational Utilities (`utils/`)
-- **`utils/file_handler.py`**: Ingestion support for `.csv`, `.xlsx`, `.xls`, `.json`, `.feather`, and `.sqlite`/`.db`.
-- **`utils/history.py`**: Discovers sample datasets (`data/sample/`) and persists recently uploaded files.
-- **`utils/helpers.py`**: Safe formatters (`format_bytes`, `format_number`, `format_percentage`) and column dtype classifier (`get_column_types`).
-- **`utils/session_state.py`**: Centralized Streamlit session state management for persistent dataset access across tabs.
+<p align="center">
+  <b>Transform raw, messy datasets into actionable intelligence with automated diagnostics, interactive visual analytics, and conversational AI agents.</b>
+</p>
 
 ---
 
-## 2. Project Folder Architecture
+## 🌟 Executive Overview
+
+**MyAnalyst** is an enterprise-grade, modular data intelligence workbench. Built with strict separation of concerns, it unites:
+- **Pure Analytical Engines** (100% deterministic, UI-independent statistics & profiling),
+- **Reusable Streamlit UI Components** (type-aware inputs, health score hero cards, interactive charts, and multi-modal chat), and
+- **Autonomous AI Agents** (natural language reasoning, code synthesis, and automated execution).
+
+---
+
+## 🚀 Key Feature Pillars
+
+| 🩺 Dataset Health & Audit | 🧹 Data Cleansing & Imputation | 📊 Dynamic Chart Studio | 💬 Conversational AI Analyst |
+| :--- | :--- | :--- | :--- |
+| Composite quality score (`0-100`) and letter grade (`A`–`F`) with bounded deductions for nulls, duplicates, and outliers. | Interactive imputation (Mean, Median, Mode, Drops) and non-destructive Winsorization outlier capping. | Context-aware chart recommendation with dynamic axis bindings across 7 visualization types. | Chat interface featuring thought traces, syntax-highlighted code expanders, and figure rendering. |
+
+---
+
+## 🏗️ System Architecture
+
+```mermaid
+flowchart TD
+    subgraph Ingestion Layer
+        Raw["Multi-Format Data (CSV, Excel, JSON, SQLite)"]
+        Sidebar["components/sidebar.py"]
+        State["Centralized Session State (utils/session_state.py)"]
+        Raw --> Sidebar --> State
+    end
+
+    subgraph Analytical Core ["analysis/ (Pure & Tested)"]
+        Prof["profiling.py (Health Score & Audit)"]
+        Stats["statistics.py (Descriptive Stats)"]
+        Miss["missing_values.py (Imputation)"]
+        Dups["duplicates.py (Deduplication)"]
+        Outs["outliers.py (IQR & Z-score)"]
+        Corrs["correlations.py (Matrices & Collinearity)"]
+    end
+
+    subgraph Modular UI Library ["components/ (Streamlit Widgets)"]
+        DS["dataset_summary.py (KPI Cards)"]
+        DP["data_preview.py (Searchable Table)"]
+        CS["column_selector.py (Smart Dropdowns)"]
+        AR["analysis_result.py (Badges & Cards)"]
+        CSelect["chart_selector.py (Plot Configurator)"]
+        Chat["chat_interface.py (AI Chat Stream)"]
+    end
+
+    subgraph Application Views ["ui/ & app.py"]
+        EDA["Tab 1: Exploratory Data Analysis (ui/Data_Analysis.py)"]
+        Viz["Tab 2: Visual Analytics (ui/Data_Visualization.py)"]
+        AI["Tab 3: Ask Your Data (ui/Ask_your_data.py)"]
+        ML["Tab 4: Predictive Modeling (ui/Predictive_Modeling.py)"]
+    end
+
+    State --> Analytical Core
+    Analytical Core --> Modular UI Library
+    Modular UI Library --> Application Views
+```
+
+---
+
+## 📦 Complete Modular UI Library (`components/`)
+
+All 7 UI components are modular, isolated, and unit-tested:
+
+| Component | Module | Responsibility & Capabilities |
+| :--- | :--- | :--- |
+| **Ingestion Sidebar** | [`components/sidebar.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/sidebar.py) | Multi-source ingestion (Upload, Samples, History), format detection, active dataset badge, and safe reset. |
+| **KPI Metric Cards** | [`components/dataset_summary.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/dataset_summary.py) | 5-column metric dashboard: Rows, Columns, Missing (%), Duplicate count, and Memory footprint. |
+| **Data Preview** | [`components/data_preview.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/data_preview.py) | Paginated DataFrame preview with live row search, column visibility toggle, and CSV download. |
+| **Smart Column Selector** | [`components/column_selector.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/column_selector.py) | Analytical type classification (Numeric, Categorical, Datetime, Boolean) with single- and multi-select dropdowns. |
+| **Analysis Cards & Badges** | [`components/analysis_result.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/analysis_result.py) | Health Grade hero card (A-F), deduction breakdown, distribution badges, and diagnostic alerts. |
+| **Chart Configurator** | [`components/chart_selector.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/chart_selector.py) | Dynamic visualization configurator with type-filtered axes, binning sliders, and standardized validation contracts. |
+| **Chat Interface** | [`components/chat_interface.py`](file:///C:/Users/Anuj%20Kumar/Desktop/Agentic_Data_Analyst/components/chat_interface.py) | Multi-modal conversational interface with collapsible thoughts, syntax-highlighted code blocks, tables, and figures. |
+
+---
+
+## 🔬 Pure Analytical Engines (`analysis/`)
+
+All computation logic lives in pure, stateless functions decoupled from Streamlit:
+
+- **`analysis/profiling.py`**:
+  - `calculate_health_score(df)`: Evaluates missingness, duplication, outliers, and constant columns to assign a composite score (`0-100`) and letter grade (`A`-`F`).
+  - `generate_dataset_audit(df)`: Master diagnostic audit aggregating shape, memory, distribution, and actionable text warnings.
+- **`analysis/outliers.py`**:
+  - `detect_outliers_iqr()` & `detect_outliers_zscore()`: Robust anomaly detectors with zero-variance protection.
+  - `cap_outliers()` & `drop_outliers()`: Safe Winsorization clamping and outlier filtering.
+- **`analysis/correlations.py`**:
+  - `calculate_correlation_matrix()`: Pearson, Spearman, and Kendall correlation matrices.
+  - `get_top_correlations()`: Extracts unique pairs with direction and strength ratings.
+  - `get_correlation_overview()`: Multicollinearity alerts ($|r| > 0.85$).
+- **`analysis/missing_values.py`**:
+  - `get_missing_summary()` & `get_missingness_overview()`: Column and overall missingness metrics.
+  - `impute_missing_values()`: Mean, median, mode, and dropping strategies.
+- **`analysis/duplicates.py`**:
+  - `get_duplicate_summary()` & `drop_duplicates_clean()`: Duplicate detection and safe deduplication.
+- **`analysis/statistics.py`**:
+  - `get_numeric_summary()`, `get_categorical_summary()`, and `get_distribution_stats()`.
+
+---
+
+## 📁 Repository Directory Structure
 
 ```
 Agentic_Data_Analyst/
 │
 ├── app.py                          # Main Streamlit application entry point & router
-├── test.py                         # Interactive Streamlit UI preview for health score & audits
-├── plan.md                         # Master implementation roadmap
-├── README.md                       # Comprehensive documentation & progress tracker
-├── pyproject.toml / requirements.txt # Dependencies
-├── .env                            # API keys (GEMINI_API_KEY / OPENAI_API_KEY)
+├── nextstep.txt                    # Active development roadmap & phase tracking
+├── plan.md                         # Master system architecture reference
+├── README.md                       # Comprehensive platform documentation
+├── pyproject.toml / uv.lock        # Project dependencies & package metadata
 │
 ├── .streamlit/
-│   └── config.toml                 # Custom Indigo UI theme and server configuration
+│   └── config.toml                 # Streamlit UI theme and server configuration
 │
 ├── data/
 │   ├── sample/                     # Built-in demo datasets (CSV, Excel, SQLite)
 │   ├── uploaded/                   # Stored user uploads
-│   └── processed/                  # Exported / transformed datasets
+│   └── processed/                  # Transformed datasets
 │
 ├── utils/                          # Cross-cutting foundational helpers
-│   ├── __init__.py
 │   ├── file_handler.py             # Multi-format ingestion (CSV, Excel, JSON, SQLite)
-│   ├── helpers.py                  # Formatting & column classification
+│   ├── helpers.py                  # Formatters & column classification
 │   ├── history.py                  # Upload history and sample dataset discovery
 │   └── session_state.py            # Centralized Streamlit session state management
 │
-├── analysis/                       # Pure statistical & analytical engines (UI-independent)
-│   ├── __init__.py                 # Exported public API
-│   ├── profiling.py                # Dataset health score (0-100, A-F) & master diagnostic audit
-│   ├── statistics.py               # Descriptive stats, skewness, kurtosis, quantiles
+├── analysis/                       # Pure statistical & analytical engines
+│   ├── profiling.py                # Dataset health score (0-100, A-F) & diagnostic audit
+│   ├── statistics.py               # Descriptive stats, skewness, kurtosis
 │   ├── missing_values.py           # Missing value analysis & imputation
 │   ├── duplicates.py               # Duplicate detection & deduplication
 │   ├── correlations.py             # Correlation matrices & top pairs
-│   └── outliers.py                 # Outlier detection (IQR, Z-score) & cleaning
-│
-├── tests/                          # Automated unit test suites
-│   ├── __init__.py
-│   └── test_profiling.py           # Unit tests for health score, deductions, & audits
-│
-├── visualization/                  # Chart generation & rendering logic
-│   ├── __init__.py
-│   ├── charts.py                   # Plotly & Matplotlib chart builders
-│   ├── chart_recommender.py        # Rule-based chart recommendations
-│   └── chart_config.py             # Color palettes & layout presets
-│
-├── agent/                          # Autonomous AI Analyst core (LLM & code execution)
-│   ├── __init__.py
-│   ├── prompts.py                  # Schema context builders & prompt templates
-│   ├── tools.py                    # Safe code execution sandbox
-│   ├── planner.py                  # Intent parsing & query classification
-│   └── agent.py                    # LLM orchestration loop
+│   └── outliers.py                 # Outlier detection (IQR, Z-score) & Winsorization
 │
 ├── components/                     # Modular, reusable Streamlit UI components
-│   ├── __init__.py
-│   ├── dataset_summary.py          # Metric cards (Rows, Columns, Missing, Duplicates)
-│   ├── data_preview.py             # Interactive table preview with search & sorting
-│   ├── column_selector.py          # Smart column dropdowns grouped by dtype
-│   ├── analysis_result.py          # Styled cards for statistical findings & alerts
-│   ├── chart_selector.py           # Visual chart configuration panel
+│   ├── sidebar.py                  # Ingestion sidebar & active dataset badge
+│   ├── dataset_summary.py          # Metric KPI cards
+│   ├── data_preview.py             # Interactive searchable table
+│   ├── column_selector.py          # Smart type-aware dropdowns
+│   ├── analysis_result.py          # Health cards, warning callouts & badges
+│   ├── chart_selector.py           # Visual plot configuration panel
 │   └── chat_interface.py          # Streamlit chat interface with code expander
 │
-└── ui/                             # Application views / tabs (imported into app.py)
-    ├── __init__.py
-    ├── Data_Analysis.py            # Tab 1: Comprehensive Exploratory Data Analysis (EDA)
-    ├── Data_Visualization.py       # Tab 2: Interactive Visual Exploration & Plot Builder
-    ├── Ask_your_data.py            # Tab 3: Autonomous AI Data Analyst Chatbot
-    └── Predictive_Modeling.py      # Tab 4: Auto-ML Baseline Classification & Regression
+├── tests/                          # Automated unit & interactive UI preview suites
+│   ├── test_analysis_result.py     # Unit tests for analysis results
+│   ├── test_analysis_result_ui.py  # Interactive UI preview for cards & badges
+│   ├── test_chart_selector.py      # Unit tests for chart selector
+│   ├── test_chart_selector_ui.py   # Interactive UI preview for chart selector
+│   ├── test_chat_interface.py       # Unit tests for chat interface
+│   ├── test_chat_interface_ui.py   # Interactive UI preview for chat interface
+│   ├── test_column_selector.py     # Unit tests for column selector
+│   ├── test_column_selector_ui.py  # Interactive UI preview for column selector
+│   ├── test_data_preview.py        # Unit tests for data preview
+│   ├── test_data_preview_ui.py     # Interactive UI preview for data preview
+│   ├── test_dataset_summary.py     # Unit tests for dataset summary
+│   ├── test_summary_ui.py          # Interactive UI preview for summary cards
+│   ├── test_profiling.py           # Unit tests for health score & audits
+│   └── test_sidebar.py             # Unit tests for sidebar component
+│
+├── visualization/                  # Chart builders & recommender heuristics
+├── agent/                          # Autonomous AI Analyst core (LLM & code execution)
+└── ui/                             # Application views (EDA, Viz, Chat, AutoML)
 ```
 
 ---
 
-## 3. Master Implementation Roadmap
+## 🚦 Interactive Component Previews
 
-### Phase 1: Core Foundation & Bug Fixes
-- [x] Consolidate sample datasets into `data/sample/`.
-- [x] Support multiple ingestion formats (CSV, Excel, JSON, SQLite) in `utils/file_handler.py`.
-- [x] Centralize session state management in `utils/session_state.py`.
-- [x] Standardize helper functions in `utils/helpers.py`.
+Test and inspect individual UI components in isolation before assembling pages:
 
-### Phase 2: Pure Analytical & Statistical Engines (`analysis/`)
-- [x] **Step 2.1 (`analysis/statistics.py`)**: Descriptive statistics, skewness, kurtosis, and distribution shapes.
-- [x] **Step 2.2 (`analysis/missing_values.py`)**: Missingness breakdown, overview KPIs, and imputation.
-- [x] **Step 2.3 (`analysis/duplicates.py`)**: Duplicate row inspection and safe removal.
-- [x] **Step 2.4 (`analysis/correlations.py`)**: Pearson, Spearman, Kendall matrices, and top correlation pairs.
-- [x] **Step 2.5 (`analysis/outliers.py`)**: IQR and Z-Score outlier detection, tabular summaries, Winsorization capping, and outlier dropping.
-- [x] **Step 2.6 (`analysis/profiling.py`)**: Health score algorithm (`0 - 100`, grades `A`–`F`), deduction rules, and master dataset diagnostic audit.
-- [x] **Step 2.7 (Export & Tests)**: Exported API in `analysis/__init__.py` and comprehensive unit tests in `tests/test_profiling.py`.
+```powershell
+# 1. Preview Chart Selector with Live Plot Rendering
+streamlit run tests/test_chart_selector_ui.py
 
-### Phase 3: Modular UI Components (`components/`)
-- [ ] **Step 3.1 (`components/dataset_summary.py`)**: Metric summary cards (Rows, Columns, Missing %, Duplicates, Memory).
-- [ ] **Step 3.2 (`components/data_preview.py`)**: Searchable and paginated data table.
-- [ ] **Step 3.3 (`components/column_selector.py`)**: Type-filtered dropdown selector.
-- [ ] **Step 3.4 (`components/analysis_result.py`)**: Badges, grade cards, and diagnostic alerts.
+# 2. Preview Conversational Chat Interface with Code Expanders
+streamlit run tests/test_chat_interface_ui.py
 
-### Phase 4: Exploratory Data Analysis View (`ui/Data_Analysis.py`)
-- [ ] Master health grade card & executive audit summary.
-- [ ] Interactive missingness matrix & imputation controls.
-- [ ] Outlier inspection sliders, capping, and row dropping actions.
-- [ ] Correlation heatmaps and top collinearity inspector.
+# 3. Preview Health Score Hero Card & Diagnostic Alerts
+streamlit run tests/test_analysis_result_ui.py
 
-### Phase 5: Visualization Engine (`visualization/` & `ui/Data_Visualization.py`)
-- [ ] Plotly & Matplotlib chart generators (Histogram, Box Plot, Scatter, Bar, Line).
-- [ ] Smart rule-based chart recommender heuristics based on column dtypes.
-- [ ] Interactive visual chart builder with color and layout presets.
+# 4. Preview Smart Type-Aware Column Dropdowns
+streamlit run tests/test_column_selector_ui.py
 
-### Phase 6: Autonomous AI Analyst (`agent/` & `ui/Ask_your_data.py`)
-- [ ] LLM integration (Google Gemini / OpenAI).
-- [ ] Safe Python code execution sandbox for pandas & matplotlib.
-- [ ] Conversational chat interface with reasoning, expandable code blocks, and chart rendering.
-
-### Phase 7: Predictive Auto-ML (`ui/Predictive_Modeling.py`)
-- [ ] Problem type inference (Classification vs. Regression).
-- [ ] Automated preprocessing pipeline (imputation, encoding, 80/20 split).
-- [ ] Baseline model training (`RandomForest`, `HistGradientBoosting`).
-- [ ] Metrics evaluation & feature importance plot.
+# 5. Preview Paginated Data Table with Search
+streamlit run tests/test_data_preview_ui.py
+```
 
 ---
 
-## 4. How to Run & Test
+## ⚡ Quickstart & Installation
 
-### 1. Prerequisites & Environment Setup
-- Python 3.12+
-- Using `uv` (recommended) or `pip`:
+### 1. Prerequisites
+- Python 3.11+
+- Virtual environment tool (`uv` recommended, or `venv`)
 
+### 2. Setup Environment
 ```powershell
-# Create and activate virtual environment
+# Clone the repository
+git clone https://github.com/your-username/Agentic_Data_Analyst.git
+cd Agentic_Data_Analyst
+
+# Create virtual environment & activate
 uv venv
 .venv\Scripts\activate
 
-# Install project dependencies
+# Install dependencies in editable mode
 uv pip install -e .
 ```
 
-### 2. Run the Unit Test Suite
-Execute the test suite covering data health scoring, capping rules, grade mappings, and diagnostic audits:
-
+### 3. Run Automated Tests
+Execute the full test suite (111 tests):
 ```powershell
-python -m unittest tests/test_profiling.py -v
+pytest
 ```
 
-### 3. Run the Health Score & Profiling UI Preview
-Preview the interactive health score card, deduction breakdown, and live editable table:
-
-```powershell
-streamlit run test.py
-```
-
-### 4. Run the Main Application
+### 4. Launch the Platform
 ```powershell
 streamlit run app.py
 ```
+
+---
+
+## 🗺️ Project Roadmap
+
+- [x] **Phase 1: Ingestion & Foundation**: Multi-format ingestion, sample datasets, session state.
+- [x] **Phase 2: Analytical Engines**: Statistics, missing values, duplicates, outliers, correlations, health scoring.
+- [x] **Phase 3: Modular UI Components**: All 7 UI widgets built, exported, and verified (111 unit tests passing).
+- [ ] **Phase 4: Exploratory Data Analysis View**: Full EDA dashboard in `ui/Data_Analysis.py` wired into `app.py`.
+- [ ] **Phase 5: Visual Analytics**: Plotly chart builders, automated chart recommender, and visual plot studio.
+- [ ] **Phase 6: Autonomous AI Analyst**: Google Gemini / OpenAI agent integration with sandboxed Python code runner.
+- [ ] **Phase 7: Predictive Auto-ML**: Automated classification & regression baselines with feature importance.
+
+---
+
+<p align="center">
+  <sub>Built with ❤️ for rapid, autonomous data science.</sub>
+</p>
