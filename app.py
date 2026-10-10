@@ -1,7 +1,7 @@
 import streamlit as st
 from components.sidebar import render_sidebar
 from ui.Data_Analysis import analysis_tab
-from ui.Data_Visualization import visualization
+from ui.Data_Visualization import visualization_tab
 from utils.session_state import get_dataset, init_session_state
 
 st.set_page_config(
@@ -30,7 +30,7 @@ if df is not None:
         analysis_tab(df)
 
     with tab_viz:
-        st.info("📈 Data Visualization tab will be fully wired in Phase 5.")
+        visualization_tab(df)
 
     with tab_chat:
         st.info("🤖 Autonomous AI Data Analyst tab will be wired in Phase 6.")
