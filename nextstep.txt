@@ -177,6 +177,41 @@ PART 3: PHASE 5 - DATA VISUALIZATION VIEW & ENGINE [COMPLETED TODAY]
    - 149 total automated tests passing across the entire project in ~11s.
 
 ================================================================================
+ARCHITECTURE PLAN: USER AUTHENTICATION & SANDBOXED DATASET ISOLATION
+================================================================================
+Goal: Enforce multi-user privacy, prevent data leaks between concurrent users,
+and persist recent datasets per user across browser reopens (Local folder isolation first, cloud-ready).
+
+1. 'utils/auth.py' (Authentication & Credential Engine):
+   - Secure credential storage in 'data/users/auth.json' (auto-ignored by Git).
+   - Cryptographic password hashing (salted pbkdf2_hmac / sha256).
+   - Core API:
+     * signup_user(username, password): Validate, hash password, initialize user folder.
+     * login_user(username, password): Verify credentials, set session state.
+     * logout_user(): Purge memory, reset active datasets, redirect to login gate.
+     * get_current_user(): Retrieve active authenticated username from session.
+
+2. 'components/auth_ui.py' (Login & Sign-Up Gate UI):
+   - Modern authentication gate with '🔑 Sign In' and '📝 Create Account' tabs.
+   - Blocks dashboard rendering via st.stop() until authentication succeeds.
+   - Sidebar user profile badge: '👤 Logged in as: <username>' with '🚪 Log Out' button.
+
+3. 'utils/history.py' (Per-User Sandboxed Storage):
+   - Migrate global 'data/uploaded/' to sandboxed 'data/users/<username>/uploads/'.
+   - save_history(file, username): Restrict file writes strictly to user's folder.
+   - get_history(username): Returns user's private uploads + public 'data/sample/'.
+     Cross-user data leakage strictly prohibited.
+   - get_file_path(filename, username): Validates ownership before file access.
+
+4. Session State & Git Protection:
+   - Complete in-memory purge upon logout to prevent state inheritance between users.
+   - Add 'data/users/*' (except .gitkeep) to '.gitignore' to protect credentials and private uploads.
+
+5. Future Cloud Deployment Roadmap (Streamlit Cloud):
+   - Swap local 'data/users/<username>/' calls with cloud storage (Supabase Storage / AWS S3)
+     using the identical user-keyed folder schema.
+
+================================================================================
 ACTION PLAN FOR NEXT STEP: PHASE 6 (AUTONOMOUS AI DATA ANALYST TAB & AGENT PIPELINE)
 ================================================================================
 1. 'agent/orchestrator.py' & Tool Calling System:
@@ -187,5 +222,6 @@ ACTION PLAN FOR NEXT STEP: PHASE 6 (AUTONOMOUS AI DATA ANALYST TAB & AGENT PIPEL
    - Stream reasoning traces, generated code blocks, tables, and Plotly charts.
 3. Wire Tab 3 into 'app.py'.
 ================================================================================
+
 
 
